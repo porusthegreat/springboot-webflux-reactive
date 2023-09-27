@@ -1,5 +1,7 @@
 package com.porus.ReactiveAPIDemo.contollers;
 
+import com.porus.ReactiveAPIDemo.exceptions.UserExceptionHandler;
+import com.porus.ReactiveAPIDemo.exceptions.UserNotFoundException;
 import com.porus.ReactiveAPIDemo.models.User;
 import com.porus.ReactiveAPIDemo.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +36,8 @@ public class UserController {
     @GetMapping("/{userId}")
     public Mono<ResponseEntity<User>> getUserById(@PathVariable String userId) {
         Mono<User> user = userService.findUserBy(userId);
-
         return user.map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound()
-                        .build());
+                .switchIfEmpty(Mono.error(new UserNotFoundException(userId)));
     }
 
     @DeleteMapping("/{userId}")
@@ -45,13 +45,13 @@ public class UserController {
         return userService.deleteUser(userId)
                 .map(r -> ResponseEntity.ok()
                         .<Void>build())
-                .defaultIfEmpty(ResponseEntity.notFound()
-                        .build());
+                .switchIfEmpty(Mono.error(new UserNotFoundException(userId)));
     }
 
     @GetMapping("/search")
     public Flux<User> searchUsers(@RequestParam("name") String name) {
-        return userService.fetchUsers(name);
+        return userService.fetchUsers(name)
+                .switchIfEmpty(Mono.error(new UserNotFoundException(name)));
     }
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
