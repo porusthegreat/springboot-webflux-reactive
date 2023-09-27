@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: ReactiveAPIDemo
+  webflux:
+    base-path: api
+  data:
+    mongodb:
+      authentication-database: admin
+      uri: mongodb://user:pass@localhost:27017/
+      database: reactiveAppDb
+
+  logging:
+    level:
+      io:
+        reflectoring: DEBUG
+      org:
+        springframework:
+          web: INFO
+          data:
+            mongodb:
+              core:
+                ReactiveMongoTemplate: DEBUG
+
+      reactor:
+        netty:
+          http:
+            client: DEBUG
