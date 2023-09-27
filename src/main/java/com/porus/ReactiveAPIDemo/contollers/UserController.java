@@ -1,6 +1,5 @@
 package com.porus.ReactiveAPIDemo.contollers;
 
-import com.porus.ReactiveAPIDemo.exceptions.UserExceptionHandler;
 import com.porus.ReactiveAPIDemo.exceptions.UserNotFoundException;
 import com.porus.ReactiveAPIDemo.models.User;
 import com.porus.ReactiveAPIDemo.services.UserService;
